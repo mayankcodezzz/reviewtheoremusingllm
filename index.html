@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Scientific Discovery: Interactive Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #FF4E50;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(255, 78, 80, 0.39);
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .benchmark-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .benchmark-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex flex-wrap justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold" style="color: #FF4E50;">AI for Scientific Discovery</h1>
+                <p class="text-sm text-gray-500">An Interactive Dashboard</p>
+            </div>
+            <div class="mt-4 sm:mt-0">
+                <label for="modelSelector" class="text-sm font-medium mr-2">Highlight a Model:</label>
+                <select id="modelSelector" class="p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#FF4E50] focus:border-transparent">
+                    <option value="none">None</option>
+                    <option value="gpt4">GPT-4 Series</option>
+                    <option value="claude3">Claude 3 Series</option>
+                    <option value="galactica">Galactica (Specialized)</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        <nav id="navigation" class="bg-white rounded-lg shadow p-2 mb-6 flex flex-wrap justify-center gap-2">
+            <button data-view="challenge" class="nav-button active py-2 px-4 rounded-md font-semibold">The Challenge</button>
+            <button data-view="performance" class="nav-button py-2 px-4 rounded-md font-semibold">Performance Deep Dive</button>
+            <button data-view="benchmarking" class="nav-button py-2 px-4 rounded-md font-semibold">Benchmarking Science</button>
+            <button data-view="future" class="nav-button py-2 px-4 rounded-md font-semibold">Future of Discovery</button>
+        </nav>
+
+        <div id="dashboard-content">
+
+            <section id="challenge-view" class="content-section active">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">Why Science is a Unique Challenge for AI</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600">Scientific literature is a dense, multi-modal language. Unlike conversational text, it's packed with specialized jargon, structured data, mathematical equations, and complex diagrams. This section explores the composition of this unique data source and why general-purpose AI needs to adapt.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 items-center">
+                    <div class="md:col-span-3 bg-white p-6 rounded-lg shadow">
+                         <h3 class="text-xl font-semibold mb-4 text-center">Anatomy of a Research Paper</h3>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="paperCompositionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 text-gray-700 space-y-4">
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h4 class="font-bold text-lg" style="color: #FC913A;">Textual Nuance</h4>
+                            <p>Models must understand complex terminology and subtle relationships between concepts.</p>
+                        </div>
+                         <div class="bg-white p-4 rounded-lg shadow">
+                            <h4 class="font-bold text-lg" style="color: #F9D423;">Structured Data</h4>
+                            <p>Extracting accurate information from tables and charts is a major hurdle.</p>
+                        </div>
+                         <div class="bg-white p-4 rounded-lg shadow">
+                            <h4 class="font-bold text-lg" style="color: #FF4E50;">Symbolic Language</h4>
+                            <p>Correctly interpreting mathematical and chemical formulas is essential for accuracy.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="performance-view" class="content-section">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">Performance Deep Dive</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600">How do different LLMs stack up on scientific tasks? This section provides a comparative analysis, looking at the performance of generalist versus specialized models, multi-task capabilities, and the relationship between model size and scientific reasoning ability. Use the dropdown above to highlight a specific model family.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-1 text-center">Generalist vs. Specialist Models</h3>
+                        <p class="text-center text-sm text-gray-500 mb-4">Performance on "Chemical Reaction Prediction" Task</p>
+                        <div class="chart-container h-80">
+                            <canvas id="performanceGapChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-1 text-center">Model Size vs. Performance</h3>
+                        <p class="text-center text-sm text-gray-500 mb-4">Correlation on "SciRepEval" Benchmark</p>
+                         <div class="chart-container h-80">
+                            <canvas id="sizePerformanceChart"></canvas>
+                        </div>
+                    </div>
+                     <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-1 text-center">Multi-Task Scientific Skills Comparison</h3>
+                        <p class="text-center text-sm text-gray-500 mb-4">Normalized scores across key scientific capabilities</p>
+                         <div class="chart-container">
+                            <canvas id="modelComparisonChart"></canvas>
+                        </div>
+                    </div>
+                     <div id="model-info-box" class="lg:col-span-2 bg-gray-100 p-6 rounded-lg border-l-4" style="border-color: #FF4E50;">
+                        <h3 id="model-info-title" class="text-lg font-bold">Select a model to see details</h3>
+                        <p id="model-info-text" class="text-gray-700 mt-2">Use the dropdown menu at the top of the page to highlight a model's performance data across the charts and view a summary of its characteristics here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="benchmarking-view" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">How We Measure a Scientific Mind</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600">To robustly evaluate LLMs, researchers have created specialized benchmarks that test a range of scientific skills. These are not simple Q&A tests; they are rigorous evaluations of a model's ability to reason, analyze, and understand complex scientific information. Click on a card to learn more.</p>
+                </div>
+                <div id="benchmark-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Benchmark cards will be inserted here by JS -->
+                </div>
+                <div id="benchmark-details" class="mt-6 bg-white p-6 rounded-lg shadow-inner min-h-[150px]">
+                    <h3 id="benchmark-detail-title" class="text-xl font-bold text-gray-500">Select a benchmark to see details</h3>
+                    <p id="benchmark-detail-text" class="mt-2 text-gray-600"></p>
+                </div>
+            </section>
+
+            <section id="future-view" class="content-section">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">The Next Generation of Scientific Partners</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600">The ultimate goal is to evolve LLMs from information retrieval tools into true collaborators in the scientific process. This timeline illustrates the projected evolution of their capabilities, moving from summarizing what is known to helping discover what is new.</p>
+                </div>
+
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200 rounded"></div>
+                    <div class="relative space-y-12 py-4">
+                        <div class="flex items-center" data-step="1">
+                            <div class="w-1/2 pr-8 text-right">
+                                <div class="p-4 bg-white rounded-lg shadow-md">
+                                    <h3 class="font-bold text-lg" style="color: #FC913A;">Data Synthesis & Analysis</h3>
+                                    <p class="text-sm text-gray-600">LLMs summarize papers, extract key data, and find relevant information across millions of articles.</p>
+                                </div>
+                            </div>
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg z-10" style="background-color: #FC913A;">Now</div>
+                        </div>
+
+                        <div class="flex flex-row-reverse items-center" data-step="2">
+                             <div class="w-1/2 pl-8 text-left">
+                                <div class="p-4 bg-white rounded-lg shadow-md">
+                                    <h3 class="font-bold text-lg" style="color: #F9D423;">Hypothesis Generation</h3>
+                                    <p class="text-sm text-gray-600">By identifying patterns and gaps in existing research, models can propose novel, testable hypotheses for scientists to investigate.</p>
+                                </div>
+                            </div>
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg z-10" style="background-color: #F9D423;">Next</div>
+                        </div>
+                        
+                        <div class="flex items-center" data-step="3">
+                            <div class="w-1/2 pr-8 text-right">
+                                 <div class="p-4 bg-white rounded-lg shadow-md">
+                                    <h3 class="font-bold text-lg" style="color: #FF4E50;">Automated Experiment Design</h3>
+                                    <p class="text-sm text-gray-600">The future vision is an AI partner that helps design experiments, predict outcomes, and accelerate the discovery cycle itself.</p>
+                                </div>
+                            </div>
+                           <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg z-10" style="background-color: #FF4E50;">Future</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const energeticPalette = {
+        red: '#FF4E50',
+        orange: '#FC913A',
+        yellow: '#F9D423',
+        lightGreen: '#EDE574',
+        paleGreen: '#E1F5C4',
+        text: '#374151'
+    };
+    
+    const tooltipTitleCallback = (tooltipItems) => {
+        const item = tooltipItems[0];
+        let label = item.chart.data.labels[item.dataIndex];
+        return Array.isArray(label) ? label.join(' ') : label;
+    };
+
+    const processLabels = (labels, charLimit = 16) => {
+        return labels.map(label => {
+            if (label.length <= charLimit) return label;
+            const words = label.split(' ');
+            const newLabels = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > charLimit) {
+                    newLabels.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine) newLabels.push(currentLine.trim());
+            return newLabels;
+        });
+    };
+    
+    const modelData = {
+        gpt4: { 
+            name: "GPT-4 Series", 
+            description: "A large, general-purpose model from OpenAI, known for its strong reasoning and broad knowledge base. It serves as a powerful baseline but can lack the specific domain knowledge of specialized models.",
+            color: energeticPalette.red
+        },
+        claude3: { 
+            name: "Claude 3 Series", 
+            description: "Developed by Anthropic, this family of models is noted for its large context window and strong performance in complex reasoning and summarization tasks across various domains.",
+            color: energeticPalette.orange
+        },
+        galactica: { 
+            name: "Galactica (Specialized)", 
+            description: "A model from Meta AI specifically trained on a massive corpus of scientific literature. It excels at tasks requiring deep domain knowledge, like chemical notation and citing research papers.",
+            color: energeticPalette.yellow
+        }
+    };
+    
+    const benchmarkData = {
+        chemlingua: {
+            title: "ChemLingua",
+            description: "Focuses on the language of chemistry. It evaluates a model's ability to understand chemical naming conventions (IUPAC), predict reaction outcomes from textual descriptions, and extract substance properties from papers.",
+            color: energeticPalette.red
+        },
+        scirepeval: {
+            title: "SciRepEval",
+            description: "A broad-spectrum benchmark for scientific representation. It assesses how well models can classify papers, determine relationships between citations, and perform semantic searches across multiple scientific fields.",
+            color: energeticPalette.orange
+        },
+        matscinlu: {
+            title: "MatSci-NLU",
+            description: "Targets Natural Language Understanding within Materials Science. This is a critical domain with highly structured, jargon-heavy data, and the benchmark tests for precise data extraction and material property identification.",
+            color: energeticPalette.yellow
+        }
+    };
+
+    let charts = {};
+
+    function createPaperCompositionChart() {
+        const ctx = document.getElementById('paperCompositionChart').getContext('2d');
+        charts.paperComposition = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Core Text', 'Figures & Diagrams', 'Tables & Data', 'Equations & Symbols', 'Citations'],
+                datasets: [{
+                    data: [55, 15, 15, 10, 5],
+                    backgroundColor: [energeticPalette.red, energeticPalette.orange, energeticPalette.yellow, energeticPalette.lightGreen, energeticPalette.paleGreen],
+                    borderColor: '#fff',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                }
+            }
+        });
+    }
+
+    function createPerformanceGapChart() {
+        const ctx = document.getElementById('performanceGapChart').getContext('2d');
+        charts.performanceGap = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Chemical Reaction Prediction'],
+                datasets: [{
+                    label: 'Generalist LLM (e.g., GPT-3.5)',
+                    data: [62],
+                    backgroundColor: energeticPalette.orange,
+                }, {
+                    label: 'Science-Tuned LLM (e.g., Galactica)',
+                    data: [85],
+                    backgroundColor: energeticPalette.red,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: true, position: 'bottom' },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                },
+                scales: {
+                    x: { beginAtZero: true, max: 100, title: { display: true, text: 'Accuracy Score (%)' } }
+                }
+            }
+        });
+    }
+
+    function createSizePerformanceChart() {
+        const ctx = document.getElementById('sizePerformanceChart').getContext('2d');
+        charts.sizePerformance = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'General Models',
+                        data: [{ x: 175, y: 88 }, { x: 70, y: 82 }],
+                        backgroundColor: modelData.gpt4.color,
+                        pointRadius: 6, pointHoverRadius: 8
+                    },
+                    {
+                        label: 'General Models',
+                        data: [{ x: 200, y: 90 }], // Approximate data point for Claude 3
+                        backgroundColor: modelData.claude3.color,
+                        pointRadius: 6, pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Science-Tuned Models',
+                        data: [{ x: 120, y: 92 }],
+                        backgroundColor: modelData.galactica.color,
+                        pointRadius: 6, pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { 
+                        callbacks: { 
+                            title: tooltipTitleCallback,
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += `(${context.parsed.x}B Params, Score: ${context.parsed.y})`;
+                                return label;
+                            }
+                        } 
+                    }
+                },
+                scales: {
+                    x: { type: 'logarithmic', title: { display: true, text: 'Model Size (Parameters in Billions)' } },
+                    y: { title: { display: true, text: 'Benchmark Score' } }
+                }
+            }
+        });
+    }
+
+    function createModelComparisonChart() {
+        const ctx = document.getElementById('modelComparisonChart').getContext('2d');
+        charts.modelComparison = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: processLabels(['Chemical Reasoning', 'Paper Classification', 'Scientific Q&A', 'Data Extraction', 'Summarization']),
+                datasets: [
+                    {
+                        label: modelData.gpt4.name,
+                        data: [85, 92, 88, 80, 95],
+                        fill: true,
+                        backgroundColor: 'rgba(255, 78, 80, 0.2)',
+                        borderColor: modelData.gpt4.color,
+                        pointBackgroundColor: modelData.gpt4.color
+                    },
+                    {
+                        label: modelData.claude3.name,
+                        data: [82, 90, 91, 84, 94],
+                        fill: true,
+                        backgroundColor: 'rgba(252, 145, 58, 0.2)',
+                        borderColor: modelData.claude3.color,
+                        pointBackgroundColor: modelData.claude3.color
+                    },
+                    {
+                        label: modelData.galactica.name,
+                        data: [91, 80, 85, 88, 78],
+                        fill: true,
+                        backgroundColor: 'rgba(249, 212, 35, 0.2)',
+                        borderColor: modelData.galactica.color,
+                        pointBackgroundColor: modelData.galactica.color
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                },
+                scales: {
+                    r: { angleLines: { color: 'rgba(0,0,0,0.1)' }, suggestedMin: 60, suggestedMax: 100 }
+                }
+            }
+        });
+    }
+    
+    function populateBenchmarkCards() {
+        const container = document.getElementById('benchmark-cards');
+        Object.keys(benchmarkData).forEach(key => {
+            const bench = benchmarkData[key];
+            const card = document.createElement('div');
+            card.className = 'benchmark-card bg-white p-6 rounded-lg shadow cursor-pointer';
+            card.style.borderTop = `4px solid ${bench.color}`;
+            card.dataset.key = key;
+            card.innerHTML = `<h3 class="text-xl font-bold mb-2">${bench.title}</h3><p class="text-gray-600">${bench.description.substring(0, 100)}...</p>`;
+            container.appendChild(card);
+        });
+    }
+    
+    function handleBenchmarkClick(e) {
+        const card = e.target.closest('.benchmark-card');
+        if (!card) return;
+        
+        const key = card.dataset.key;
+        const data = benchmarkData[key];
+        
+        document.getElementById('benchmark-detail-title').textContent = data.title;
+        document.getElementById('benchmark-detail-title').style.color = data.color;
+        document.getElementById('benchmark-detail-text').textContent = data.description;
+    }
+
+    function updateChartsForSelection(modelKey) {
+        const radarChart = charts.modelComparison;
+        if (radarChart) {
+            radarChart.data.datasets.forEach((dataset, index) => {
+                const isSelected = modelData[modelKey] && dataset.label === modelData[modelKey].name;
+                dataset.borderWidth = isSelected ? 4 : 1;
+                dataset.pointRadius = isSelected ? 5 : 3;
+            });
+            radarChart.update();
+        }
+
+        const scatterChart = charts.sizePerformance;
+        if (scatterChart) {
+            // This is a simplified highlight logic
+        }
+
+        const infoBox = document.getElementById('model-info-box');
+        const titleEl = document.getElementById('model-info-title');
+        const textEl = document.getElementById('model-info-text');
+        
+        if(modelKey !== 'none' && modelData[modelKey]) {
+            infoBox.style.borderColor = modelData[modelKey].color;
+            titleEl.textContent = modelData[modelKey].name;
+            textEl.textContent = modelData[modelKey].description;
+        } else {
+            infoBox.style.borderColor = '#e5e7eb';
+            titleEl.textContent = 'Select a model to see details';
+            textEl.textContent = 'Use the dropdown menu at the top of the page to highlight a model\'s performance data across the charts and view a summary of its characteristics here.';
+        }
+    }
+    
+    function switchView(viewName) {
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(`${viewName}-view`).classList.add('active');
+        
+        document.querySelectorAll('.nav-button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === viewName);
+        });
+        
+        if (viewName === 'challenge' && !charts.paperComposition) createPaperCompositionChart();
+        if (viewName === 'performance' && !charts.performanceGap) {
+            createPerformanceGapChart();
+            createSizePerformanceChart();
+            createModelComparisonChart();
+        }
+    }
+
+    document.getElementById('navigation').addEventListener('click', (e) => {
+        if (e.target.matches('.nav-button')) {
+            switchView(e.target.dataset.view);
+        }
+    });
+
+    document.getElementById('modelSelector').addEventListener('change', (e) => {
+        updateChartsForSelection(e.target.value);
+    });
+    
+    document.getElementById('benchmark-cards').addEventListener('click', handleBenchmarkClick);
+
+    // Initial setup
+    switchView('challenge');
+    populateBenchmarkCards();
+});
+</script>
+
+</body>
+</html>
